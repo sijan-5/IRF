@@ -5,6 +5,8 @@ from sklearn.model_selection import train_test_split
 import random
 import math
 
+from feature_ranking.feature_ranking import LocalGlobalWt
+
 # Possible values from the original dataset
 outlook_options = ["Sunny", "Overcast", "Rain"]
 temperature_options = ["Hot", "Mild", "Cool"]
@@ -14,7 +16,8 @@ play_tennis_options = ["Yes", "No"]
 
 # How many samples you want
 num_samples = 14 * 3  # Tripling original dataset size
-
+each_tree_ft_wt = []
+each_tree_normalized_wt = []
 # Generate the dataset
 dataset = {
     "Outlook": [random.choice(outlook_options) for _ in range(num_samples)],
@@ -26,10 +29,8 @@ dataset = {
 
 # Convert to DataFrame
 df = pd.DataFrame(dataset)
-
-
-print(df['Outlook'])
-
+print("colu", len(df.columns))
+feature_ranking = LocalGlobalWt(len(df.columns)-1)
 # Split into features and target
 
 X = df.drop(columns=["PlayTennis"])
@@ -201,8 +202,10 @@ def random_forest(x_train, y_train, n_estimators, max_features, max_depth, min_s
         tree = build_tree(x_bootstrap, y_bootstrap, max_features, max_depth, min_samples_split)
         tree_ls.append(tree)
         oob_error = oob_score(tree, x_oob, y_oob)
+        each_tree_ft_wt.append(feature_ranking.find_local_weight_feature(tree))
         oob_ls.append(oob_error)
     print("OOB estimate: {:.2f}".format(np.mean(oob_ls)))
+    each_tree_normalized_wt.extend(feature_ranking.normalized_weight_of_tree(oob_ls))
     return tree_ls
 
 
@@ -244,11 +247,11 @@ max_depth = 3
 min_samples_split = 2
 
 model = random_forest(X_train, y_train, n_estimators, max_features, max_depth, min_samples_split)
-
+global_wt = feature_ranking.global_wt(each_tree_ft_wt, each_tree_normalized_wt)
+print("global-weight-------", global_wt)
 # Make predictions
 preds = predict_rf(model, X_test)
 
 # Evaluate
 acc = sum(preds == y_test.values) / len(y_test)
-print("abc")
 print("Testing accuracy: {}".format(np.round(acc, 3)))
