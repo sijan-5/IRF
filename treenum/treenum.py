@@ -63,7 +63,7 @@ delta_u=round(delta_u,4)
 delta_v=round(delta_v,4)
 nu = round(compute_nu(q, rho, Nav, B),4)
 l = round(compute_l(q, Nav, B),4)
-deltaB = round(compute_deltaB(qu, qv, delta_u, delta_v, l, nu),4);
+deltaB = round(compute_deltaB(qu, qv, delta_u, delta_v, l, nu),4)
 accuracy = round(compute_accuracy(lambda_val, strength, correlation),4)
 
 print("qu:", qu)

@@ -1,16 +1,5 @@
 import math
 import numpy as np
-
-# Generate a longer random feature list
-global_feature_list = {
-    'feature0': 0.3842, 'feature1': 0.2457, 'feature2': 0.8247, 'feature3': 0.6475,
-    'feature4': 0.8985, 'feature5': 0.5111}
-
-# Generate updated feature values
-updated_global_feature_list = {'feature0': 0.7092, 'feature1': 0.8273, 'feature2': 0.346, 'feature3': 0.2032,
-                               'feature4': 0.6878, 'feature5': 0.1739, 'feature6': 0.8437}
-g_list = [global_feature_list, updated_global_feature_list]
-
 # For tracking previous lengths
 del_u = 0
 del_v = 0
@@ -44,12 +33,16 @@ def compute(global_list):
     print("Unimp feature", unimportant_features)
     remove_low_unimportant()
     promote_features()
+    common_imp_unimp = {**important_features, **unimportant_features}
+    print("common_features", common_imp_unimp)
+    print("-------------------after removal and promotion-------------------")
     del_u = len(important_features) - imp_feature_size_before
     del_v = len(unimportant_features) - unimp_feature_size_before
     print("Imp feature", important_features)
     print("Unimp feature", unimportant_features)
     print("del-u", del_u)
     print("del-v", del_v)
+    return common_imp_unimp
 
 def remove_low_unimportant():
     global unimportant_features
@@ -61,7 +54,7 @@ def remove_low_unimportant():
     std = np.std(values)
     threshold = mean - (2 * std)
     # Filter out features below threshold
-    unimportant_features = {k: v for k, v in unimportant_features.items() if v >= threshold}
+    unimportant_features = {k: v for k, v in unimportant_features.items() if v > threshold}
 
 def promote_features():
     global important_features, unimportant_features

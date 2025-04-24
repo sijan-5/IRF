@@ -38,7 +38,7 @@ class LocalGlobalWt:
         # Calculate sums and local weights
         feature_sums = {feature: sum(qualities) for feature, qualities in feature_to_qualities.items()}
         local_weights = {feature: total / self.N for feature, total in feature_sums.items()}
-        return list(local_weights.values())
+        return  local_weights
 
     def normalized_weight_of_tree(self, oob_list):
         inverse_list = [1 / oob for oob in oob_list]
@@ -46,16 +46,15 @@ class LocalGlobalWt:
         normalized_weight = [oob / highest for oob in inverse_list]
         return normalized_weight
 
-    def global_wt(self, feature_wt_ls, normalized_tree_wt_ls):
-        num_features = len(feature_wt_ls[0])
-        feature_sums = []
-        for i in range(num_features):
-            sum_feature = feature_wt_ls[0][i] * normalized_tree_wt_ls[0] + feature_wt_ls[1][i] * normalized_tree_wt_ls[
-                1] + feature_wt_ls[2][i] * normalized_tree_wt_ls[2]
-            feature_sums.append(sum_feature)
-        # Printing nicely
-        for idx, val in enumerate(feature_sums):
-            print(f"sum_feature{idx} : {val}")
-        largest = max(feature_sums)
-        return [round(x/largest, 4) for x in feature_sums]
+    def global_wt(self, feature_wt, normalized_tree_wt):
+        # Compute weighted sum for each index
+        result = {}
+        for i in range(len(feature_wt)):
+            for k, v in feature_wt[i].items():
+                result[k] = result.get(k, 0) + v * normalized_tree_wt[i]
+
+        print(result)
+        largest = max(result.values())
+        normalized_global_wt = {key: value/largest for key,value in result.items()}
+        return normalized_global_wt
 
