@@ -22,7 +22,7 @@ def compute_correlation(u, v, f, Nav, B):
 
     rho_prime = 1 - comb(total_features - f, f) / comb(total_features, f)
     rho = rho_prime ** Nav
-    return 1 - (1 - rho) ** (B // 2)
+    return 1 - (1 - rho) ** (B // 2) , rho
 
 u = 3
 v = 2
@@ -33,8 +33,8 @@ B = 5
 r = compute_r(u, v, f)
 q = compute_q(u, v, f)
 strength = round(compute_strength(q, Nav, B),4)
-correlation = round(compute_correlation(u, v, f, Nav, B),4);
-
+correlation, rho = compute_correlation(u, v, f, Nav, B)
+correlation=round(correlation,4)
 print(f"r (no important feature selected): {r}")
 print(f"q (good split probability): {q}")
 print(f"Strength (ηs): {strength}")

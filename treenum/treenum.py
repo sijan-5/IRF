@@ -2,7 +2,8 @@ import numpy as np
 import math
 
 #η = λ (ηs - ηc)
-def compute_accuracy(lambda_val, strength, correlation):
+def compute_accuracy(strength, correlation):
+    lambda_val = 1
     return lambda_val * (strength - correlation)
 
 # r = comb(v, f) / comb(u+v, f)
@@ -17,7 +18,7 @@ def compute_qu_qv(u, v, f):
     r_u_plus = compute_r(u + 1, v, f)
     r_v_plus = compute_r(u, v + 1, f)
     qu = -(r_u_plus - r_current)  # approximate ∂q/∂u = -∂r/∂u
-    qv = -(r_current - r_v_plus)  # approximate ∂q/∂v = -∂r/∂v
+    qv = -(r_v_plus - r_current)  # approximate ∂q/∂v = -∂r/∂v
     return qu, qv
 
 def compute_delta_u_v(u_old, u_new, v_old, v_new):
@@ -43,8 +44,8 @@ def compute_deltaB(qu, qv, delta_u, delta_v, l, nu):
     bound = abs(numerator / nu)
     return max(0, math.floor(bound))
 
-u_old, v_old = 3, 5   # old counts
-u_new, v_new = 4, 4   # new counts after promotion/pruning
+u_old, v_old = 3, 5  
+u_new, v_new = 4, 4  
 f = 3
 Nav = 10
 B = 20
@@ -63,8 +64,8 @@ delta_u=round(delta_u,4)
 delta_v=round(delta_v,4)
 nu = round(compute_nu(q, rho, Nav, B),4)
 l = round(compute_l(q, Nav, B),4)
-deltaB = round(compute_deltaB(qu, qv, delta_u, delta_v, l, nu),4);
-accuracy = round(compute_accuracy(lambda_val, strength, correlation),4)
+deltaB = round(compute_deltaB(qu, qv, delta_u, delta_v, l, nu),4)
+accuracy = round(compute_accuracy(strength, correlation),4)
 
 print("qu:", qu)
 print("qv:", qv)
