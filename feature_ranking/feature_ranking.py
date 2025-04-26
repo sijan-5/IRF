@@ -1,4 +1,3 @@
-
 # Tree data (without comments for proper parsing)
 
 # Organize collected data
@@ -59,4 +58,3 @@ class LocalGlobalWt:
         largest = max(result.values())
         normalized_global_wt = {key: value/largest for key,value in result.items()}
         return normalized_global_wt
-

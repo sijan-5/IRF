@@ -29,17 +29,17 @@ def compute(global_list):
 
     unimp_feature_size_before = len(unimportant_features)
     imp_feature_size_before = len(important_features)
-    print("Imp feature", important_features)
-    print("Unimp feature", unimportant_features)
+    # print("Imp feature", important_features)
+    # print("Unimp feature", unimportant_features)
     remove_low_unimportant()
     promote_features()
     common_imp_unimp = {**important_features, **unimportant_features}
-    print("common_features", common_imp_unimp)
-    print("-------------------after removal and promotion-------------------")
+    # print("common_features", common_imp_unimp)
+    # print("-------------------after removal and promotion-------------------")
     del_u = len(important_features) - imp_feature_size_before
     del_v = len(unimportant_features) - unimp_feature_size_before
-    print("Imp feature", important_features)
-    print("Unimp feature", unimportant_features)
+    # print("Imp feature", important_features)
+    # print("Unimp feature", unimportant_features)
     print("del-u", del_u)
     print("del-v", del_v)
     return common_imp_unimp, len(important_features), len(unimportant_features), del_u, del_v
@@ -48,14 +48,17 @@ def remove_low_unimportant():
     global unimportant_features
     if not unimportant_features:
         return
-
     values = np.array(list(unimportant_features.values()))
     mean = np.mean(values)
     std = np.std(values)
     threshold = mean - (2 * std)
     # Filter out features below threshold
+    unimportant_features_len = len(unimportant_features)
     unimportant_features = {k: v for k, v in unimportant_features.items() if v > threshold}
-
+    if unimportant_features_len == len(unimportant_features):
+        min_key = min(unimportant_features, key = unimportant_features.get)
+        del unimportant_features[min_key]
+    print("unnnnnnnnnnnnnnnnnnnn", unimportant_features)
 def promote_features():
     global important_features, unimportant_features
     if not unimportant_features:
