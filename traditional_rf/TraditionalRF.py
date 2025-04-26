@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 
 
 
-from strength_corr_treenum.find_r_q_s_c import compute_r, compute_q, compute_strength, compute_correlation
+from r_q_str_corr.find_r_q_s_c import compute_r, compute_q, compute_strength, compute_correlation
 
 from feature_weight_update.feature_weight_update import compute
 
@@ -40,12 +40,12 @@ dataset = {
 
 # Convert to DataFrame
 df = pd.DataFrame(dataset)
-f = math.sqrt(len(df.columns))
+f = int(math.sqrt(len(df.columns)))
 print("columns", len(df.columns))
 feature_ranking = LocalGlobalWt(len(df.columns)-1)
 # Split into features and target
 b = 1
-while b >= 1:
+while b !=0:
     X = df.drop(columns=["PlayTennis"])
     y = df["PlayTennis"]
 
@@ -114,7 +114,7 @@ while b >= 1:
                 feature_ls.extend(feature_idx)
 
         # best_info_gain = -999
-        best_quality_of_split = -999
+        best_quality_of_split = -999999
         node = None
         for feature_idx in feature_ls:
             for split_point in X_bootstrap[:, feature_idx]:
