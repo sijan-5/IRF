@@ -42,7 +42,7 @@ class LocalGlobalWt:
         return  local_weights
 
     def normalized_weight_of_tree(self, oob_list):
-        inverse_list = [1 / oob for oob in oob_list]
+        inverse_list = [1 / oob if oob != 0 else 0 for oob in oob_list]
         highest = max(inverse_list)
         normalized_weight = [oob / highest for oob in inverse_list]
         return normalized_weight
@@ -53,8 +53,9 @@ class LocalGlobalWt:
         for i in range(len(feature_wt)):
             for k, v in feature_wt[i].items():
                 result[k] = result.get(k, 0) + v * normalized_tree_wt[i]
-  
+        print()
         print(result)
+        print()
         largest = max(result.values())
         normalized_global_wt = {key: value/largest for key,value in result.items()}
         return normalized_global_wt
