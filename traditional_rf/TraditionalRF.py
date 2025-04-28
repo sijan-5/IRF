@@ -7,74 +7,86 @@ from r_q_str_corr.find_r_q_s_c import compute_r, compute_q, compute_strength, co
 from feature_weight_update.feature_weight_update import compute
 from treenum.treenum import compute_accuracy, compute_qu_qv, compute_nu, compute_l, compute_deltaB
 from feature_ranking.feature_ranking import LocalGlobalWt
+from dataCleaning.data_cleaning import load_and_clean_titanic
+
+df=load_and_clean_titanic()
+print(df)
+print()
+print()
+print()
+print()
 
 # How many samples you want
-num_samples = 14 * 3  # Tripling original dataset size
+
+# num_samples = 14 * 3  # Tripling original dataset size
 each_tree_ft_wt = []
 each_tree_normalized_wt = []
 
 global tree_ls, nav, v, n_estimators
 
 # Options for each feature
-outlook_options = ["Sunny", "Overcast", "Rain"]
-temperature_options = ["Hot", "Mild", "Cool"]
-humidity_options = ["High", "Normal"]
-wind_options = ["Weak", "Strong"]
-cloudcover_options = ["None", "Partial", "Full"]
-pressure_options = ["High", "Medium", "Low"]
-visibility_options = ["Clear", "Foggy"]
-dewpoint_options = ["Low", "Medium", "High"]
-uvindex_options = ["Low", "Moderate", "High"]
-rainfall_options = ["No", "Light", "Heavy"]
-snowfall_options = ["No", "Light", "Heavy"]
-thunder_options = ["No", "Yes"]
-storm_options = ["No", "Yes"]
-heatwave_options = ["No", "Yes"]
-coldsnap_options = ["No", "Yes"]
-pollutionlevel_options = ["Low", "Moderate", "High"]
-airquality_options = ["Good", "Moderate", "Poor"]
-winddirection_options = ["North", "South", "East", "West"]
-sunshine_options = ["Low", "Medium", "High"]
-humiditylevel_options = ["Low", "Moderate", "High"]
-temperaturefeel_options = ["Cold", "Warm", "Hot"]
-pressuretrend_options = ["Rising", "Falling", "Steady"]
-visibilitytrend_options = ["Improving", "Worsening"]
-season_options = ["Summer", "Winter", "Monsoon", "Spring"]
-lightning_options = ["None", "Mild", "Severe"]
-play_tennis_options = ["Yes", "No"]
+
+# outlook_options = ["Sunny", "Overcast", "Rain"]
+# temperature_options = ["Hot", "Mild", "Cool"]
+# humidity_options = ["High", "Normal"]
+# wind_options = ["Weak", "Strong"]
+# cloudcover_options = ["None", "Partial", "Full"]
+# pressure_options = ["High", "Medium", "Low"]
+# visibility_options = ["Clear", "Foggy"]
+# dewpoint_options = ["Low", "Medium", "High"]
+# uvindex_options = ["Low", "Moderate", "High"]
+# rainfall_options = ["No", "Light", "Heavy"]
+# snowfall_options = ["No", "Light", "Heavy"]
+# thunder_options = ["No", "Yes"]
+# storm_options = ["No", "Yes"]
+# heatwave_options = ["No", "Yes"]
+# coldsnap_options = ["No", "Yes"]
+# pollutionlevel_options = ["Low", "Moderate", "High"]
+# airquality_options = ["Good", "Moderate", "Poor"]
+# winddirection_options = ["North", "South", "East", "West"]
+# sunshine_options = ["Low", "Medium", "High"]
+# humiditylevel_options = ["Low", "Moderate", "High"]
+# temperaturefeel_options = ["Cold", "Warm", "Hot"]
+# pressuretrend_options = ["Rising", "Falling", "Steady"]
+# visibilitytrend_options = ["Improving", "Worsening"]
+# season_options = ["Summer", "Winter", "Monsoon", "Spring"]
+# lightning_options = ["None", "Mild", "Severe"]
+# play_tennis_options = ["Yes", "No"]
 
 # Build the dataset dictionary
-dataset = {
-    "Outlook": [random.choice(outlook_options) for _ in range(num_samples)],
-    "Temperature": [random.choice(temperature_options) for _ in range(num_samples)],
-    "Humidity": [random.choice(humidity_options) for _ in range(num_samples)],
-    "Wind": [random.choice(wind_options) for _ in range(num_samples)],
-    "CloudCover": [random.choice(cloudcover_options) for _ in range(num_samples)],
-    "Pressure": [random.choice(pressure_options) for _ in range(num_samples)],
-    "Visibility": [random.choice(visibility_options) for _ in range(num_samples)],
-    "DewPoint": [random.choice(dewpoint_options) for _ in range(num_samples)],
-    "UVIndex": [random.choice(uvindex_options) for _ in range(num_samples)],
-    "Rainfall": [random.choice(rainfall_options) for _ in range(num_samples)],
-    "Snowfall": [random.choice(snowfall_options) for _ in range(num_samples)],
-    "Thunder": [random.choice(thunder_options) for _ in range(num_samples)],
-    "Storm": [random.choice(storm_options) for _ in range(num_samples)],
-    "Heatwave": [random.choice(heatwave_options) for _ in range(num_samples)],
-    "ColdSnap": [random.choice(coldsnap_options) for _ in range(num_samples)],
-    "PollutionLevel": [random.choice(pollutionlevel_options) for _ in range(num_samples)],
-    "AirQuality": [random.choice(airquality_options) for _ in range(num_samples)],
-    "WindDirection": [random.choice(winddirection_options) for _ in range(num_samples)],
-    "Sunshine": [random.choice(sunshine_options) for _ in range(num_samples)],
-    "HumidityLevel": [random.choice(humiditylevel_options) for _ in range(num_samples)],
-    "TemperatureFeel": [random.choice(temperaturefeel_options) for _ in range(num_samples)],
-    "PressureTrend": [random.choice(pressuretrend_options) for _ in range(num_samples)],
-    "VisibilityTrend": [random.choice(visibilitytrend_options) for _ in range(num_samples)],
-    "Season": [random.choice(season_options) for _ in range(num_samples)],
-    "Lightning": [random.choice(lightning_options) for _ in range(num_samples)],
-    "PlayTennis": [random.choice(play_tennis_options) for _ in range(num_samples)],
-}
+
+# dataset = {
+#     "Outlook": [random.choice(outlook_options) for _ in range(num_samples)],
+#     "Temperature": [random.choice(temperature_options) for _ in range(num_samples)],
+#     "Humidity": [random.choice(humidity_options) for _ in range(num_samples)],
+#     "Wind": [random.choice(wind_options) for _ in range(num_samples)],
+#     "CloudCover": [random.choice(cloudcover_options) for _ in range(num_samples)],
+#     "Pressure": [random.choice(pressure_options) for _ in range(num_samples)],
+#     "Visibility": [random.choice(visibility_options) for _ in range(num_samples)],
+#     "DewPoint": [random.choice(dewpoint_options) for _ in range(num_samples)],
+#     "UVIndex": [random.choice(uvindex_options) for _ in range(num_samples)],
+#     "Rainfall": [random.choice(rainfall_options) for _ in range(num_samples)],
+#     "Snowfall": [random.choice(snowfall_options) for _ in range(num_samples)],
+#     "Thunder": [random.choice(thunder_options) for _ in range(num_samples)],
+#     "Storm": [random.choice(storm_options) for _ in range(num_samples)],
+#     "Heatwave": [random.choice(heatwave_options) for _ in range(num_samples)],
+#     "ColdSnap": [random.choice(coldsnap_options) for _ in range(num_samples)],
+#     "PollutionLevel": [random.choice(pollutionlevel_options) for _ in range(num_samples)],
+#     "AirQuality": [random.choice(airquality_options) for _ in range(num_samples)],
+#     "WindDirection": [random.choice(winddirection_options) for _ in range(num_samples)],
+#     "Sunshine": [random.choice(sunshine_options) for _ in range(num_samples)],
+#     "HumidityLevel": [random.choice(humiditylevel_options) for _ in range(num_samples)],
+#     "TemperatureFeel": [random.choice(temperaturefeel_options) for _ in range(num_samples)],
+#     "PressureTrend": [random.choice(pressuretrend_options) for _ in range(num_samples)],
+#     "VisibilityTrend": [random.choice(visibilitytrend_options) for _ in range(num_samples)],
+#     "Season": [random.choice(season_options) for _ in range(num_samples)],
+#     "Lightning": [random.choice(lightning_options) for _ in range(num_samples)],
+#     "PlayTennis": [random.choice(play_tennis_options) for _ in range(num_samples)],
+# }
 
 # Convert to DataFrame
-df = pd.DataFrame(dataset)
+# df = pd.DataFrame(dataset)
+
 f = int(math.sqrt(len(df.columns)))
 v = len(df.columns)  # Total columns (features + label)
 n_estimators = 10
@@ -138,7 +150,9 @@ def find_split_point(X_bootstrap, y_bootstrap, max_features):
     best_quality_of_split = -999999
     node = None
     for feature_idx in feature_ls:
-        for split_point in X_bootstrap[:, feature_idx]:
+        unique_vals = np.unique(X_bootstrap[:, feature_idx])
+        # for split_point in X_bootstrap[:, feature_idx]:
+        for split_point in unique_vals:    
             left_child = {'X_bootstrap': [], 'y_bootstrap': []}
             right_child = {'X_bootstrap': [], 'y_bootstrap': []}
 
@@ -287,7 +301,8 @@ while v >= f:
     y_test = y_test.reset_index(drop=True)
 
     max_features = f
-    max_depth = None
+    # max_depth = None
+    max_depth = 6
     min_samples_split = 2
 
     model = random_forest(X_train, y_train, n_estimators, max_features, max_depth, min_samples_split)
@@ -309,20 +324,27 @@ while v >= f:
     acc = sum(preds == y_test.values) / len(y_test)
 
     # 1) Build the filtered dict by index
-    all_cols = list(dataset.keys())
+    # all_cols = list(dataset.keys())
+    all_cols = df.columns.tolist() 
     last_idx = len(all_cols) - 1        # index of PlayTennis
     keep_idxs = set(updated_features.keys())
 
-    new_dataset = {
-        col: vals
-        for idx, (col, vals) in enumerate(dataset.items())
-        if idx in keep_idxs or idx == last_idx
-    }
+    # new_dataset = {
+    #     col: vals
+    #     for idx, (col, vals) in enumerate(dataset.items())
+    #     if idx in keep_idxs or idx == last_idx
+    # }
      
-    dataset=new_dataset
+    # dataset=new_dataset
     
-    # 2) And as a DataFrame:
-    df = pd.DataFrame(dataset)
+    # # 2) And as a DataFrame:
+    # df = pd.DataFrame(dataset)
+    
+    # build the list of columns to KEEP: selected features + the label
+    keep_cols = [ all_cols[i] for i in keep_idxs ] + [ label ]
+
+    # slice your DataFrame in one go, reset the index
+    df = df[keep_cols].reset_index(drop=True)
     
     print()
     print("Testing accuracy: {}".format(np.round(acc, 3)))
