@@ -89,7 +89,7 @@ global tree_ls, nav, v, n_estimators
 
 f = int(math.sqrt(len(df.columns)))
 v = len(df.columns)  # Total columns (features + label)
-n_estimators = 10
+n_estimators = 20
 feature_ranking = LocalGlobalWt(len(df.columns) - 1)
 
 feature_names = list(df.columns) # e.g. ['Outlook', 'Temperature', …, 'PlayTennis']
@@ -302,8 +302,8 @@ while v >= f:
 
     max_features = f
     # max_depth = None
-    max_depth = 6
-    min_samples_split = 2
+    max_depth = 3
+    min_samples_split = 4
 
     model = random_forest(X_train, y_train, n_estimators, max_features, max_depth, min_samples_split)
     global_wt = feature_ranking.global_wt(each_tree_ft_wt, each_tree_normalized_wt)
@@ -347,7 +347,8 @@ while v >= f:
     df = df[keep_cols].reset_index(drop=True)
     
     print()
-    print("Testing accuracy: {}".format(np.round(acc, 3)))
+    # print("Testing accuracy: {}".format(np.round(acc, 5)))
+    print("Testing accuracy: {}".format(acc))
     n_estimators += delta_b
     print("f", f)
     print("v", v)
